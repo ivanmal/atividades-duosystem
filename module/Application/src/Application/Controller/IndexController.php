@@ -79,6 +79,24 @@ class IndexController extends AbstractActionController
         }
         $atividades = $this->getAtividadeTable()->findAll($param);
 
-        return new ViewModel(array('form' => $form, 'atividades' => $atividades, 'statusTable'=> $this->getStatusTable()));
+        return new ViewModel(array('form' => $form, 'atividades' => $atividades, 'statusTable' => $this->getStatusTable()));
+    }
+
+    public function changeSituacaoAction()
+    {
+
+        $id = $this->params()->fromRoute('id', 0);
+
+        if ($id) {
+            try {
+                $atividade = $this->getAtividadeTable()->changeSituacao($id);
+
+                $this->flashMessenger()->addSuccessMessage(array('success' => 'Situação da atividade alterada.'));
+            } catch (\Exception $e) {
+                $this->flashMessenger()->addErrorMessage(array('error' => 'Erro ao alterar a Atividade.'));
+            }
+        }
+
+        return $this->redirect()->toRoute('home');
     }
 }

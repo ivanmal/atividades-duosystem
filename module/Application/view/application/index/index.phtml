@@ -29,25 +29,27 @@ echo $this->formElement($form->get('submit'));
 
 <br/>
 <div class="row">   
-    <table id="listagem" class="table table-bordered table-hover">
+    <table id="listagem" class="table table-bordered table-hover display responsive" style="width: 100%">
         <thead>
             <tr>
                 <th>Nome</th>
+                <th class="none">Descricão</th>
                 <th>Data Inicial</th>
                 <th>Data Fim</th>
                 <th>Status</th>
                 <th>Situação</th>
-                <th class="no-sort">&nbsp;</th>
+                <th class="no-sort all">&nbsp;</th>
             </tr>   
         </thead>
         <tfoot>
             <tr>
                 <th>Nome</th>
+                <th>Descrição</th>
                 <th>Data Inicial</th>
                 <th>Data Fim</th>
                 <th>Status</th>
                 <th>Situação</th>
-                <th class="no-sort">&nbsp;</th>
+                <th>&nbsp;</th>
             </tr>   
         </tfoot>
         <?php foreach ($atividades as $atividade) : ?>
@@ -64,13 +66,18 @@ echo $this->formElement($form->get('submit'));
             }
 
             ?>
-        <tr <?php if ($atividade->getStatus() == Application\Model\Constantes::STATUS_CONCLUIDO): ?>style="background-color: #dff0d8"<?php endif; ?>>
+            <tr <?php if ($atividade->getStatus() == Application\Model\Constantes::STATUS_CONCLUIDO): ?>style="background-color: #dff0d8"<?php endif; ?>>
                 <td><?= $this->escapeHtml($atividade->getNome()); ?></td>
+                <td><?= $this->escapeHtml($atividade->getDescricao()); ?></td>
                 <td><?= $dataInicio ?></td>
                 <td><?= $dataFim ?></td>
                 <td><?= $this->escapeHtml($statusTable->findStatus($atividade->getStatus())->getNome()); ?></td>
                 <td><?= $this->escapeHtml($atividade->getLabelSituacao()); ?></td>
-                <td>Botões de ação</td>
+                <td>
+                    <a class="btn <?php if ($atividade->getSituacao()): ?>btn-success<?php else: ?>btn-danger<?php endif ?>" href="<?php echo $this->url('application', array('action' => 'changeSituacao', 'id' => $atividade->getId())); ?>">
+                        <span class="glyphicon glyphicon-off"></span>
+                    </a>
+                </td>
             </tr>
         <?php endforeach; ?>
     </table>
@@ -80,7 +87,7 @@ echo $this->formElement($form->get('submit'));
 
 <script>
 
-    $(document).ready(function () {
+    $(function () {
         $('#listagem').DataTable({
             responsive: true,
             language: {

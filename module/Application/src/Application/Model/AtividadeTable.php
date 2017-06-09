@@ -26,7 +26,12 @@ class AtividadeTable implements AtividadeTableInterface
 
     public function findAtividade($id)
     {
-        
+        $rowset = $this->tableGateway->select(array('id' => $id));
+        $row = $rowset->current();
+        if (!$row) {
+            throw new \Exception("Não foi possível encontrar a atividade");
+        }
+        return $row;
     }
 
     public function save(AtividadeInterface $atividade)
@@ -36,6 +41,21 @@ class AtividadeTable implements AtividadeTableInterface
 
     public function changeSituacao($id)
     {
-        
+        $data = array();
+
+        $atividade = $this->findAtividade($id);
+
+        if ($atividade) {
+
+            if ($atividade->getSituacao() == 0) {
+                $data['situacao'] = 1;
+            } else {
+                $data['situacao'] = 0;
+            }
+
+            $this->tableGateway->update($data, array('id' => $id));
+        } else {
+            throw new \Exception('Atividade não encontrada');
+        }
     }
 }

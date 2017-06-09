@@ -120,7 +120,7 @@ class Atividade implements AtividadeInterface
 
     public function getLabelSituacao()
     {
-        if ($this->status) {
+        if ($this->situacao) {
             return 'Ativo';
         }
 
