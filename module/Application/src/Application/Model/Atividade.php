@@ -29,18 +29,18 @@ class Atividade implements AtividadeInterface
 
     /**
      *
-     * @var date
+     * @var string
      */
     private $dataInicio;
 
     /**
      *
-     * @var date
+     * @var string
      */
     private $dataFim;
 
     /**
-     *
+     * Id do Status
      * @var int
      */
     private $status;

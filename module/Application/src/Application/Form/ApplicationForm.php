@@ -1,14 +1,19 @@
 <?php
 namespace Application\Form;
 
-use Zend\Form\Element;
+use Application\Model\StatusTableInterface;
 use Zend\Form\Form;
-use Zend\Form\Element\Csrf;
 
 class ApplicationForm extends Form
 {
 
-    public function __construct($name)
+    /**
+     *
+     * @var StatusTableInterface
+     */
+    private $statusTable;
+
+    public function __construct($name, StatusTableInterface $status)
     {
 
         parent::__construct($name);
@@ -32,6 +37,23 @@ class ApplicationForm extends Form
                     '1' => 'Ativo',
                     '0' => 'Inativo',
                 ),
+            ),
+        ));
+
+        $this->add(array(
+            'name' => 'status',
+            'type' => 'Zend\Form\Element\Select',
+            'attributes' => array(
+                'class' => 'form-control',
+                'required' => false,
+                'value' => '',
+            ),
+            'options' => array(
+                'label' => 'Status',
+                'label_attributes' => array(
+                    'class' => 'col-2 col-form-label',
+                ),
+                'value_options' => $status->findAll(array('type' => 'array')),
             ),
         ));
 

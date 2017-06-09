@@ -34,7 +34,7 @@ interface AtividadeInterface
     public function getDataFim();
     
     /**
-     * @return type status
+     * @return int id do status
      */
     public function getStatus();
     

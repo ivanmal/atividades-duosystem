@@ -10,6 +10,8 @@ namespace Application;
 
 use Application\Model\Atividade;
 use Application\Model\AtividadeTable;
+use Application\Model\Status;
+use Application\Model\StatusTable;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Mvc\ModuleRouteListener;
@@ -55,6 +57,17 @@ class Module
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Atividade());
                     return new TableGateway('atividade', $dbAdapter, null, $resultSetPrototype);
+                },
+                'Application\Model\StatusTable' => function($sm) {
+                    $tableGateway = $sm->get('StatusTableGateway');
+                    $table = new StatusTable($tableGateway);
+                    return $table;
+                },
+                'StatusTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Status());
+                    return new TableGateway('status', $dbAdapter, null, $resultSetPrototype);
                 },
             ),
         );

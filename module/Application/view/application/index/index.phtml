@@ -16,8 +16,8 @@ $form->prepare();
 echo $this->form()->openTag($form);
 
 ?>
-
-<?= $this->formlabel($form->get('situacao')); ?> <?= $this->formElement($form->get('situacao')); ?>   
+<?= $this->formlabel($form->get('status')); ?> <?= $this->formElement($form->get('status')) ?>   
+<?= $this->formlabel($form->get('situacao')); ?> <?= $this->formElement($form->get('situacao')) ?>   
 
 <?php
 echo $this->formRow($form->get('loginCsrf'));
@@ -64,11 +64,11 @@ echo $this->formElement($form->get('submit'));
             }
 
             ?>
-            <tr <?php if ($atividade->getStatus() == 4): ?>style="background-color: #dff0d8"<?php endif; ?>>
+        <tr <?php if ($atividade->getStatus() == Application\Model\Constantes::STATUS_CONCLUIDO): ?>style="background-color: #dff0d8"<?php endif; ?>>
                 <td><?= $this->escapeHtml($atividade->getNome()); ?></td>
                 <td><?= $dataInicio ?></td>
                 <td><?= $dataFim ?></td>
-                <td><?= $this->escapeHtml($atividade->getStatus()); ?></td>
+                <td><?= $this->escapeHtml($statusTable->findStatus($atividade->getStatus())->getNome()); ?></td>
                 <td><?= $this->escapeHtml($atividade->getLabelSituacao()); ?></td>
                 <td>Botões de ação</td>
             </tr>
