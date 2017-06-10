@@ -6,13 +6,6 @@ use Zend\Form\Form;
 
 class ApplicationForm extends Form
 {
-
-    /**
-     *
-     * @var StatusTableInterface
-     */
-    private $statusTable;
-
     public function __construct($name, StatusTableInterface $status)
     {
 
@@ -30,7 +23,7 @@ class ApplicationForm extends Form
             'options' => array(
                 'label' => 'Situação',
                 'label_attributes' => array(
-                    'class' => 'col-2 col-form-label',
+                    'class' => 'form-control-label',
                 ),
                 'value_options' => array(
                     '' => 'Todos',
@@ -51,7 +44,7 @@ class ApplicationForm extends Form
             'options' => array(
                 'label' => 'Status',
                 'label_attributes' => array(
-                    'class' => 'col-2 col-form-label',
+                    'class' => 'form-control-label',
                 ),
                 'value_options' => $status->findAll(array('type' => 'array')),
             ),
@@ -59,7 +52,7 @@ class ApplicationForm extends Form
 
         $this->add(array(
             'type' => 'Zend\Form\Element\Csrf',
-            'name' => 'loginCsrf',
+            'name' => 'csrf',
             'options' => array(
                 'csrf_options' => array(
                     'timeout' => 3600

@@ -27,6 +27,11 @@ class StatusTable implements StatusTableInterface
 
         if (isset($param['type']) && $param['type'] == 'array') {
             $result[''] = 'Todos';
+
+            if (!empty($param['select'])) {
+                $result[''] = $param['select'];
+            }
+
             foreach ($resultSet as $row) {
                 $result[$row->getId()] = $row->getNome();
             }

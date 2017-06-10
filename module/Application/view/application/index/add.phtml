@@ -1,0 +1,108 @@
+<?php
+$flash = $this->flashMessenger();
+echo $flash->render('error', array('alert', 'alert-dismissible', 'alert-danger'));
+echo $flash->render('info', array('alert', 'alert-dismissible', 'alert-info'));
+echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning'));
+echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
+
+$title = 'Adicionar Atividade';
+$this->headTitle($title);
+
+?>
+<h1><?= $this->escapeHtml($title) ?></h1></br>    
+
+<?php
+$form = $this->form;
+$form->prepare();
+echo $this->form()->openTag($form);
+
+?>
+<div class="form-group">
+    <?php
+    echo $this->formlabel($form->get('nome'));
+    echo $this->formElement($form->get('nome'));
+
+    ?>
+    <div class="form-text text-muted"><?= $this->errorMessages($form->get('nome'), $translator) ?></div>
+</div>
+
+<div class="form-group">
+    <?php
+    echo $this->formlabel($form->get('descricao'));
+    echo $this->formElement($form->get('descricao'));
+
+    ?>
+    <div class="form-text text-muted"><?= $this->errorMessages($form->get('descricao'), $translator) ?></div>
+</div>
+
+<div class="form-group">
+    <?php
+    echo $this->formlabel($form->get('status'));
+    echo $this->formElement($form->get('status'));
+
+    ?>
+    <div class="form-text text-muted"><?= $this->errorMessages($form->get('status'), $translator) ?></div>
+</div>
+
+<div class="form-group">
+    <?= $this->formlabel($form->get('data_inicio')) ?>
+    <div id="data_inicio" class="input-group date" style="width: 25%">
+        <?= $this->formElement($form->get('data_inicio')) ?>
+        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>    
+    </div>
+    <div class="form-text text-muted"><?= $this->errorMessages($form->get('data_inicio'), $translator) ?></div>
+</div>
+
+<div class="form-group">
+    <?= $this->formlabel($form->get('data_fim')) ?>
+    <div id="data_fim" class="input-group date" style="width: 25%">
+        <?= $this->formElement($form->get('data_fim')) ?>
+        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>    
+    </div>
+    <div class="form-text text-muted"><?= $this->errorMessages($form->get('data_fim'), $translator) ?></div>
+</div>
+
+<?php
+echo $this->formRow($form->get('csrf'));
+echo $this->formElement($form->get('submit'));
+echo $this->form()->closeTag($form);
+
+?>
+
+<script>
+
+    $(function () {
+
+        $('#data_inicio input').mask("00/00/0000", {placeholder: "__/__/____"});
+
+        $('#data_inicio').datepicker({
+            format: "dd/mm/yyyy",
+            startView: 1,
+            maxViewMode: 0,
+            todayBtn: "linked",
+            clearBtn: true,
+            language: "pt-BR"
+        });
+
+        $('#data_fim input').mask("00/00/0000", {placeholder: "__/__/____"});
+
+        $('#data_fim').datepicker({
+            format: "dd/mm/yyyy",
+            startView: 1,
+            maxViewMode: 0,
+            todayBtn: "linked",
+            clearBtn: true,
+            language: "pt-BR"
+        });
+
+        $(`#status`).on('change', function () {
+            if ($(this).val() == <?= \Application\Model\Constantes::STATUS_CONCLUIDO ?>) {
+                $('#data_fim input').prop('required', 'true');
+            } else {
+                $('#data_fim input').prop('required', null);
+            }
+        });
+
+    });
+
+</script>

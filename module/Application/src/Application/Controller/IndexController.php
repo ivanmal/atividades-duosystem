@@ -9,8 +9,14 @@
 namespace Application\Controller;
 
 use Application\Form\ApplicationForm;
+use Application\Form\AtividadeForm;
+use Application\Form\Filter\AtividadeFilter;
 use Application\Model\AtividadeTableInterface;
 use Application\Model\StatusTableInterface;
+use Exception;
+use Zend\I18n\Translator\Resources;
+use Zend\I18n\Translator\Translator;
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -28,6 +34,12 @@ class IndexController extends AbstractActionController
      * @var StatusTableInterface
      */
     private $statusTable;
+
+    /**
+     *
+     * @var TranslatorInterface
+     */
+    private $translator;
 
     /**
      * Recupera instância de AtividadeTable
@@ -55,6 +67,27 @@ class IndexController extends AbstractActionController
         return $this->statusTable;
     }
 
+    /**
+     * 
+     * @return TranslatorInterface
+     */
+    public function getTranslator()
+    {
+        if (!$this->translator) {
+            $this->translator = new Translator();
+
+            $this->translator->addTranslationFilePattern(
+                'phpArray', Resources::getBasePath(), Resources::getPatternForValidator()
+            );
+        }
+
+        return $this->translator;
+    }
+
+    /**
+     * Index
+     * @return ViewModel
+     */
     public function indexAction()
     {
         $form = new ApplicationForm('Filtro', $this->getServiceLocator()->get('Application\Model\StatusTable'));
@@ -82,6 +115,44 @@ class IndexController extends AbstractActionController
         return new ViewModel(array('form' => $form, 'atividades' => $atividades, 'statusTable' => $this->getStatusTable()));
     }
 
+    /**
+     * Adicionar Atividade
+     * @return ViewModel
+     */
+    public function addAction()
+    {
+        $form = new AtividadeForm('addForm', $this->getServiceLocator()->get('Application\Model\StatusTable'));
+        $form->setInputFilter(new AtividadeFilter());
+        $form->get('submit')->setValue('Adicionar');
+
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+
+            $form->setData($request->getPost());
+
+            if ($form->isValid()) {
+
+                $atividade = new \Application\Model\Atividade();
+
+                $atividade->exchangeArray($form->getData());
+
+                try {
+                    $this->getAtividadeTable()->save($atividade);
+
+                    $this->flashMessenger()->addSuccessMessage(array('success' => 'Atividade criada com sucesso.'));
+                    return $this->redirect()->toRoute('home');
+                } catch (Exception $e) {
+                    echo $this->flashMessenger()->addErrorMessage(array($e->getMessage()));
+                }
+            } else {
+                $this->flashMessenger()->addErrorMessage(array('error' => 'Verifique o(s) campo(s)'));
+            }
+        }
+
+        return new ViewModel(array('form' => $form, 'translator' => $this->getTranslator()));
+    }
+
     public function changeSituacaoAction()
     {
 
@@ -92,8 +163,8 @@ class IndexController extends AbstractActionController
                 $atividade = $this->getAtividadeTable()->changeSituacao($id);
 
                 $this->flashMessenger()->addSuccessMessage(array('success' => 'Situação da atividade alterada.'));
-            } catch (\Exception $e) {
-                $this->flashMessenger()->addErrorMessage(array('error' => 'Erro ao alterar a Atividade.'));
+            } catch (Exception $e) {
+                $this->flashMessenger()->addErrorMessage(array('error' => $e->getMessage()));
             }
         }
 

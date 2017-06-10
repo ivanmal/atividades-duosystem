@@ -20,7 +20,7 @@ echo $this->form()->openTag($form);
 <?= $this->formlabel($form->get('situacao')); ?> <?= $this->formElement($form->get('situacao')) ?>   
 
 <?php
-echo $this->formRow($form->get('loginCsrf'));
+echo $this->formRow($form->get('csrf'));
 echo $this->formElement($form->get('submit'));
 
 ?>
@@ -68,19 +68,24 @@ echo $this->formElement($form->get('submit'));
             ?>
             <tr <?php if ($atividade->getStatus() == Application\Model\Constantes::STATUS_CONCLUIDO): ?>style="background-color: #dff0d8"<?php endif; ?>>
                 <td><?= $this->escapeHtml($atividade->getNome()); ?></td>
-                <td><?= $this->escapeHtml($atividade->getDescricao()); ?></td>
+                <td><?= nl2br($this->escapeHtml($atividade->getDescricao())) ?></td>
                 <td><?= $dataInicio ?></td>
                 <td><?= $dataFim ?></td>
                 <td><?= $this->escapeHtml($statusTable->findStatus($atividade->getStatus())->getNome()); ?></td>
                 <td><?= $this->escapeHtml($atividade->getLabelSituacao()); ?></td>
                 <td>
-                    <a class="btn <?php if ($atividade->getSituacao()): ?>btn-success<?php else: ?>btn-danger<?php endif ?>" href="<?php echo $this->url('application', array('action' => 'changeSituacao', 'id' => $atividade->getId())); ?>">
-                        <span class="glyphicon glyphicon-off"></span>
-                    </a>
+                    <?php if ($atividade->getStatus() != Application\Model\Constantes::STATUS_CONCLUIDO): ?>
+                        <a class="btn <?php if ($atividade->getSituacao()): ?>btn-success<?php else: ?>btn-danger<?php endif ?>" href="<?php echo $this->url('application', array('action' => 'changeSituacao', 'id' => $atividade->getId())); ?>">
+                            <span class="glyphicon glyphicon-off"></span>
+                        </a>
+                    <?php endif; ?>
                 </td>
             </tr>
         <?php endforeach; ?>
     </table>
+
+    <a class="btn btn-success pull-right" href="<?php echo $this->url('application', array('action' => 'add')); ?>"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;
+        Adicionar nova Atividade&nbsp;<span class="glyphicon glyphicon-tasks"></span></a>
 
 </div>
 

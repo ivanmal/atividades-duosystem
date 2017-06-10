@@ -36,7 +36,26 @@ class AtividadeTable implements AtividadeTableInterface
 
     public function save(AtividadeInterface $atividade)
     {
-        
+        $dataInicio = \DateTime::createFromFormat('d/m/Y', $atividade->getDataInicio());
+        $dataInicio = $dataInicio->format('Y-m-d');
+
+        if (!empty($atividade->getDataFim())) {
+            $dataFim = \DateTime::createFromFormat('d/m/Y', $atividade->getDataFim());
+            $dataFim = $dataFim->format('Y-m-d');
+        } else {
+            $dataFim = $atividade->getDataFim();
+        }
+
+        $data = array(
+            'nome' => $atividade->getNome(),
+            'descricao' => $atividade->getDescricao(),
+            'data_inicio' => $dataInicio,
+            'data_fim' => $dataFim,
+            'status' => $atividade->getStatus(),
+            'situacao' => $atividade->getSituacao(),
+        );
+
+        $this->tableGateway->insert($data);
     }
 
     public function changeSituacao($id)
@@ -46,6 +65,10 @@ class AtividadeTable implements AtividadeTableInterface
         $atividade = $this->findAtividade($id);
 
         if ($atividade) {
+
+            if ($atividade->getStatus() == Constantes::STATUS_CONCLUIDO) {
+                throw new \Exception('Não é possível alterar atividades concluídas.');
+            }
 
             if ($atividade->getSituacao() == 0) {
                 $data['situacao'] = 1;

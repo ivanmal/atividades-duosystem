@@ -77,26 +77,30 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'errorMessages' => 'Application\Form\View\Helper\ErrorMessages',
+        )
+    ),
     'navigation' => array(
         'default' => array(
             array(
                 'label' => 'Home',
                 'route' => 'home',
+            ),
+            array(
+                'label' => 'Home',
+                'route' => 'application',
                 'pages' => array(
                     array(
                         'label' => 'Adicionar',
-                        'route' => 'app',
+                        'route' => 'application',
                         'action' => 'add',
                     ),
                     array(
                         'label' => 'Editar',
-                        'route' => 'edit',
+                        'route' => 'application',
                         'action' => 'edit',
-                    ),
-                    array(
-                        'label' => 'Visualizar',
-                        'route' => 'view',
-                        'action' => 'view',
                     ),
                 ),
             ),
