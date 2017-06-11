@@ -49,7 +49,7 @@ class Atividade implements AtividadeInterface
      *
      * @var int
      */
-    private $situacao = 1;
+    private $situacao;
 
     /**
      * 
@@ -63,7 +63,7 @@ class Atividade implements AtividadeInterface
         $this->dataInicio = (!empty($data['data_inicio'])) ? $data['data_inicio'] : null;
         $this->dataFim = (!empty($data['data_fim'])) ? $data['data_fim'] : null;
         $this->status = (!empty($data['status'])) ? $data['status'] : null;
-        $this->situacao = (!empty($data['situacao'])) ? $data['situacao'] : $this->situacao;
+        $this->situacao = (!empty($data['situacao'])) ? $data['situacao'] : null;
     }
 
     /**

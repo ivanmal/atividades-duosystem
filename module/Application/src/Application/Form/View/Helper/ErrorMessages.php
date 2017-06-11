@@ -54,9 +54,7 @@ class ErrorMessages extends AbstractHelper
             $messagesToPrint[] = $escapeHtml($translator->translate($item, 'default', 'pt_BR'));
         });
 
-        $markup = '';//'<ul%s><li>';
-        $markup .= implode(''/*'</li><li>'*/, $messagesToPrint);
-        $markup .= '';//'</li></ul>';
+        $markup = implode('<br/>', $messagesToPrint);
 
         return $markup;
     }

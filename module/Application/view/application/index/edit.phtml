@@ -5,7 +5,7 @@ echo $flash->render('info', array('alert', 'alert-dismissible', 'alert-info'));
 echo $flash->render('default', array('alert', 'alert-dismissible', 'alert-warning'));
 echo $flash->render('success', array('alert', 'alert-dismissible', 'alert-success'));
 
-$title = 'Adicionar Atividade';
+$title = 'Editar Atividade ' . $form->get('id')->getValue();
 $this->headTitle($title);
 
 ?>
@@ -15,7 +15,9 @@ $this->headTitle($title);
 $form = $this->form;
 $form->prepare();
 echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
 echo $this->formHidden($form->get('situacao'));
+
 ?>
 <div class="form-group">
     <?php
@@ -46,6 +48,7 @@ echo $this->formHidden($form->get('situacao'));
 
 <div class="form-group">
     <?= $this->formlabel($form->get('data_inicio')) ?>
+    <input id="data_inicio_format" type="hidden" value="<?= $form->get('data_inicio')->getValue() ?>">
     <div id="data_inicio" class="input-group date" style="width: 25%">
         <?= $this->formElement($form->get('data_inicio')) ?>
         <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>    
@@ -55,6 +58,7 @@ echo $this->formHidden($form->get('situacao'));
 
 <div class="form-group">
     <?= $this->formlabel($form->get('data_fim')) ?>
+    <input id="data_fim_format" type="hidden" value="<?= $form->get('data_fim')->getValue() ?>">
     <div id="data_fim" class="input-group date" style="width: 25%">
         <?= $this->formElement($form->get('data_fim')) ?>
         <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>    
@@ -73,6 +77,9 @@ echo $this->form()->closeTag($form);
 
     $(function () {
 
+        var dataInicial = getFormatDate($('#data_inicio_format').val());
+        $('#data_inicio input').val(dataInicial);
+
         $('#data_inicio input').mask("00/00/0000", {placeholder: "__/__/____"});
 
         $('#data_inicio').datepicker({
@@ -83,6 +90,9 @@ echo $this->form()->closeTag($form);
             clearBtn: true,
             language: "pt-BR"
         });
+
+        var dataFinal = getFormatDate($('#data_fim_format').val());
+        $('#data_fim input').val(dataFinal);
 
         $('#data_fim input').mask("00/00/0000", {placeholder: "__/__/____"});
 
@@ -104,5 +114,27 @@ echo $this->form()->closeTag($form);
         });
 
     });
+
+    function getFormatDate(param) {
+
+        var split = param.split("-");
+
+        if (split.length != 3)
+        {
+            return param;
+        }
+
+        var date = new Date(split[0], split[1] - 1, split[2]);
+
+        var year = date.getFullYear();
+
+        var month = (1 + date.getMonth()).toString();
+        month = month.length > 1 ? month : '0' + month;
+
+        var day = date.getDate().toString();
+        day = day.length > 1 ? day : '0' + day;
+
+        return day + '/' + month + '/' + year;
+    }
 
 </script>

@@ -55,7 +55,18 @@ class AtividadeTable implements AtividadeTableInterface
             'situacao' => $atividade->getSituacao(),
         );
 
-        $this->tableGateway->insert($data);
+        $id = $atividade->getId();
+
+        if ($id == 0) {
+            $this->tableGateway->insert($data);
+        }
+        else {
+            if ($this->findAtividade($id)) {
+                $this->tableGateway->update($data, array('id' => $id));
+            } else {
+                throw new \Exception('Atividade não encontrada');
+            }
+        }
     }
 
     public function changeSituacao($id)

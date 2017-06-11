@@ -32,6 +32,7 @@ echo $this->formElement($form->get('submit'));
     <table id="listagem" class="table table-bordered table-hover display responsive" style="width: 100%">
         <thead>
             <tr>
+                <th class="all">ID</th>
                 <th>Nome</th>
                 <th class="none">Descricão</th>
                 <th>Data Inicial</th>
@@ -43,6 +44,7 @@ echo $this->formElement($form->get('submit'));
         </thead>
         <tfoot>
             <tr>
+                <th>ID</th>
                 <th>Nome</th>
                 <th>Descrição</th>
                 <th>Data Inicial</th>
@@ -67,6 +69,7 @@ echo $this->formElement($form->get('submit'));
 
             ?>
             <tr <?php if ($atividade->getStatus() == Application\Model\Constantes::STATUS_CONCLUIDO): ?>style="background-color: #dff0d8"<?php endif; ?>>
+                <td><?= $this->escapeHtml($atividade->getId()); ?></td>
                 <td><?= $this->escapeHtml($atividade->getNome()); ?></td>
                 <td><?= nl2br($this->escapeHtml($atividade->getDescricao())) ?></td>
                 <td><?= $dataInicio ?></td>
@@ -75,6 +78,12 @@ echo $this->formElement($form->get('submit'));
                 <td><?= $this->escapeHtml($atividade->getLabelSituacao()); ?></td>
                 <td>
                     <?php if ($atividade->getStatus() != Application\Model\Constantes::STATUS_CONCLUIDO): ?>
+
+                        <?php if ($atividade->getSituacao()): ?>
+                            <a class="btn btn-info" href="<?php echo $this->url('application', array('action' => 'edit', 'id' => $atividade->getId())); ?>">
+                                <span class="glyphicon glyphicon-pencil"></span>&nbsp;Editar</a>
+                        <?php endif; ?>
+                    
                         <a class="btn <?php if ($atividade->getSituacao()): ?>btn-success<?php else: ?>btn-danger<?php endif ?>" href="<?php echo $this->url('application', array('action' => 'changeSituacao', 'id' => $atividade->getId())); ?>">
                             <span class="glyphicon glyphicon-off"></span>
                         </a>

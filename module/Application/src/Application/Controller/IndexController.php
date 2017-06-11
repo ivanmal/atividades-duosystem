@@ -153,6 +153,58 @@ class IndexController extends AbstractActionController
         return new ViewModel(array('form' => $form, 'translator' => $this->getTranslator()));
     }
 
+    public function editAction()
+    {
+
+        $id = $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            return $this->redirect()->toRoute('home');
+        }
+
+        try {
+            $atividade = $this->getAtividadeTable()->findAtividade($id);
+        } catch (\Exception $e) {
+            $this->flashMessenger()->addErrorMessage(array('error' => 'Atividade näo encontrada.'));
+            return $this->redirect()->toRoute('home');
+        }
+
+        if ($atividade->getStatus() == \Application\Model\Constantes::STATUS_CONCLUIDO) {
+            $this->flashMessenger()->addErrorMessage(array('error' => 'Não é possível alterar atividades concluídas.'));
+            return $this->redirect()->toRoute('home');
+        }
+
+        if (!$atividade->getSituacao()) {
+            $this->flashMessenger()->addErrorMessage(array('error' => 'Não é possível alterar atividades inativas.'));
+            return $this->redirect()->toRoute('home');
+        }
+
+        $form = new AtividadeForm('editForm', $this->getStatusTable());
+        $form->bind($atividade);
+        $form->setInputFilter(new AtividadeFilter());
+        $form->get('submit')->setValue('Editar');
+
+        $request = $this->getRequest();
+
+        if ($request->isPost()) {
+            $form->setData($request->getPost());
+
+            if ($form->isValid()) {
+                try {
+                    $this->getAtividadeTable()->save($atividade);
+
+                    $this->flashMessenger()->addSuccessMessage(array('success' => 'Atividade alterada com sucesso.'));
+                    return $this->redirect()->toRoute('home');
+                } catch (Exception $e) {
+                    echo $this->flashMessenger()->addErrorMessage(array($e->getMessage()));
+                }
+            } else {
+                $this->flashMessenger()->addErrorMessage(array('error' => 'Verifique o(s) campo(s)'));
+            }
+        }
+
+        return new ViewModel(array('id' => $id, 'form' => $form, 'translator' => $this->getTranslator(),));
+    }
+
     public function changeSituacaoAction()
     {
 

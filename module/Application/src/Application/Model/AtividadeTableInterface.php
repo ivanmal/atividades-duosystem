@@ -17,6 +17,7 @@ interface AtividadeTableInterface
     /**
      * Retorna uma Atividade de acordo com o id
      * @param int $id
+     * @return \Application\Model\AtividadeInterface
      */
     public function findAtividade($id);
 

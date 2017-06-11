@@ -26,6 +26,7 @@ class AtividadeForm extends Form
             'attributes' => array(
                 'class' => 'form-control',
                 'required' => true,
+                'size' => '255',
             ),
             'options' => array(
                 'label' => 'Nome',
@@ -41,6 +42,7 @@ class AtividadeForm extends Form
             'attributes' => array(
                 'class' => 'form-control',
                 'required' => true,
+                'size' => '600',
             ),
             'options' => array(
                 'label' => 'Descrição',
@@ -101,6 +103,9 @@ class AtividadeForm extends Form
         $this->add(array(
             'name' => 'situacao',
             'required' => true,
+            'attributes' => array(
+                'value' => 1,
+            ),
             'filters' => array(
                 array('name' => 'Boolean'),
             ),
