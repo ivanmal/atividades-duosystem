@@ -27,6 +27,7 @@ class AtividadeForm extends Form
                 'class' => 'form-control',
                 'required' => true,
                 'size' => '255',
+                'maxlength' => '255',
             ),
             'options' => array(
                 'label' => 'Nome',
@@ -43,6 +44,7 @@ class AtividadeForm extends Form
                 'class' => 'form-control',
                 'required' => true,
                 'size' => '600',
+                'maxlength' => '600',
             ),
             'options' => array(
                 'label' => 'Descrição',
